@@ -47,6 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
+                textCapitalization: TextCapitalization.words,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
@@ -57,13 +58,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   border: InputBorder.none,
                 ),
                 controller: _controller,
+                onFieldSubmitted: (value) async {
+                  _weather =
+                      await _weatherService.getWeather(city: _controller.text);
+                  setState(() {});
+                },
+                onTap: () {
+                  _controller.clear();
+                },
               ),
-              SizedBox(
-                width: 250,
-                child: Image.asset('assets/sun.png'),
+              Visibility(
+                visible: _weather != null,
+                child: SizedBox(
+                  width: 250,
+                  child: Image.asset(_weather?.image ?? ''),
+                ),
               ),
               Text(
-                '29°',
+                _weather?.degrees != null ? '${_weather?.degrees}°' : '--',
                 style: GoogleFonts.lato(
                   textStyle: Theme.of(context).textTheme.headline4,
                   fontSize: 90,
@@ -71,9 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: AppColors.bunting,
                 ),
               ),
-              const Text(
-                'Cloudy',
-                style: TextStyle(
+              Text(
+                _weather?.desc.toUpperCase() ?? 'Not found',
+                style: const TextStyle(
                   fontSize: 25,
                   color: AppColors.bunting,
                 ),

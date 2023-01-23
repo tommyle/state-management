@@ -9,7 +9,8 @@ class WeatherService {
     Weather? weather;
     try {
       final response = await _dio.get(
-          "https://api.openweathermap.org/data/2.5/weather?q=$city&units=metric&appid=$_apiKey");
+        "https://api.openweathermap.org/data/2.5/weather?q=$city&units=metric&appid=$_apiKey",
+      );
       weather = Weather.fromJson(response.data);
     } catch (e) {
       print(e);
