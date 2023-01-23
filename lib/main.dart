@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:state_management/common/app_colors.dart';
+import 'package:state_management/models/weather.dart';
+import 'package:state_management/services/weather_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,10 +30,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _controller = TextEditingController();
+  Weather? _weather;
+  final WeatherService _weatherService = WeatherService();
 
   @override
   void initState() {
     _controller.text = 'Vancouver';
+    _weatherService.getWeather(city: _controller.text).then((value) {
+      _weather = value;
+      setState(() {});
+    });
+
     super.initState();
   }
 
